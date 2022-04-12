@@ -7,9 +7,13 @@ import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.example.domain.RestResponse;
 import com.example.domain.Subject;
 import com.example.service.SubjectService;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
 
 
@@ -18,12 +22,35 @@ import java.util.List;
 @RequestMapping("/subjects")
 public class SubjectController {
     private SubjectService subjectService;
+    private final Logger logger = LoggerFactory.getLogger(SubjectController.class);
 
     @Autowired
     public SubjectController(SubjectService subjectService) {
         this.subjectService = subjectService;
     }
 
+    @RequestMapping(value = "/grade",method = RequestMethod.GET)
+    public RestResponse<List<Subject>> getGrades() {
+        List<Subject> subjects = subjectService.list();
+        HashSet<String> grades = new HashSet<>();
+        subjects.forEach(subject -> {
+            grades.add(subject.getGrade());
+        });
+        List<Subject> ret = new ArrayList<>();
+        grades.forEach(grade -> {
+           ret.add(new Subject(grade));
+        });
+        return RestResponse.success(ret);
+    }
+
+    @RequestMapping(method = RequestMethod.GET)
+    public RestResponse<List<Subject>> getSubjects(String grade) {
+        LambdaQueryWrapper<Subject> queryWrapper = new LambdaQueryWrapper<>();
+        if(grade == "") grade = null;
+        queryWrapper.eq(grade != null, Subject::getGrade , grade);
+        List<Subject> subjects = subjectService.list(queryWrapper);
+        return RestResponse.success(subjects);
+    }
 
     @RequestMapping(method = RequestMethod.POST)
     public RestResponse getSubject(@RequestBody Subject subject) {
