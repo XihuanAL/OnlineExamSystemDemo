@@ -1,7 +1,6 @@
 package com.example.controller;
 
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
-import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.example.domain.RestResponse;
@@ -32,22 +31,22 @@ public class SubjectController {
     @RequestMapping(value = "/grade",method = RequestMethod.GET)
     public RestResponse<List<Subject>> getGrades() {
         List<Subject> subjects = subjectService.list();
-        HashSet<String> grades = new HashSet<>();
+        HashSet<String> gradeNames = new HashSet<>();
         subjects.forEach(subject -> {
-            grades.add(subject.getGrade());
+            gradeNames.add(subject.getGradeName());
         });
         List<Subject> ret = new ArrayList<>();
-        grades.forEach(grade -> {
-           ret.add(new Subject(grade));
+        gradeNames.forEach(gradeName -> {
+           ret.add(new Subject(gradeName));
         });
         return RestResponse.success(ret);
     }
 
     @RequestMapping(method = RequestMethod.GET)
-    public RestResponse<List<Subject>> getSubjects(String grade) {
+    public RestResponse<List<Subject>> getSubjects(String gradeName) {
         LambdaQueryWrapper<Subject> queryWrapper = new LambdaQueryWrapper<>();
-        if(grade == "") grade = null;
-        queryWrapper.eq(grade != null, Subject::getGrade , grade);
+        if(gradeName == "") gradeName = null;
+        queryWrapper.eq(gradeName != null, Subject::getGradeName , gradeName);
         List<Subject> subjects = subjectService.list(queryWrapper);
         return RestResponse.success(subjects);
     }
@@ -79,8 +78,8 @@ public class SubjectController {
     @RequestMapping(value = "{currentPage}/{pageSize}", method = RequestMethod.GET)
     public RestResponse<List<Subject>> getSubjects(@PathVariable Integer currentPage,@PathVariable Integer pageSize ,Subject subject) {
         LambdaQueryWrapper<Subject> queryWrapper = new LambdaQueryWrapper<>();
-        queryWrapper.like(subject.getSubject() != null, Subject::getSubject , subject.getSubject());
-        queryWrapper.like(subject.getGrade() != null, Subject::getGrade , subject.getGrade());
+        queryWrapper.like(subject.getSubjectName() != null, Subject::getSubjectName, subject.getSubjectName());
+        queryWrapper.like(subject.getGradeName() != null, Subject::getGradeName , subject.getGradeName());
         IPage<Subject> page = new Page<>(currentPage, pageSize);
         IPage<Subject> subjectIPage = subjectService.page(page, queryWrapper);
         return RestResponse.success(subjectIPage);

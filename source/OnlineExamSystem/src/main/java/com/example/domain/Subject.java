@@ -5,18 +5,18 @@ import lombok.Data;
 @Data
 public class Subject {
     private Integer id;
-    private String grade;
-    private String subject;
+    private String gradeName;
+    private String subjectName;
 
     public Subject() {
     }
 
-    public Subject(String grade, String subject) {
-        this.grade = grade;
-        this.subject = subject;
+    public Subject(String gradeName, String subjectName) {
+        this.gradeName = gradeName;
+        this.subjectName = subjectName;
     }
 
-    public Subject(String grade) {
-        this.grade = grade;
+    public Subject(String gradeName) {
+        this.gradeName = gradeName;
     }
 }

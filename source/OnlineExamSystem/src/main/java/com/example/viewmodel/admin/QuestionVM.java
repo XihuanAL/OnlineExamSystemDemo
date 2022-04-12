@@ -7,8 +7,8 @@ import lombok.Data;
 @Data
 public class QuestionVM {
     private Integer id;
-    private String grade;
-    private String subject;
+    private String gradeName;
+    private String subjectName;
     private String quesContent;
     private String ansContent;
     private Integer score;
@@ -16,8 +16,8 @@ public class QuestionVM {
 
     public QuestionVM(Subject subject, Question question) {
         this.id=question.getId();
-        this.grade=subject.getGrade();
-        this.subject=subject.getSubject();
+        this.gradeName=subject.getGradeName();
+        this.subjectName =subject.getSubjectName();
         this.quesContent=question.getQuesContent();
         this.ansContent=question.getAnsContent();
         this.score=question.getScore();

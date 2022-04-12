@@ -11,7 +11,7 @@
  Target Server Version : 80026
  File Encoding         : 65001
 
- Date: 12/04/2022 13:27:55
+ Date: 12/04/2022 15:24:23
 */
 
 SET NAMES utf8mb4;
@@ -39,7 +39,7 @@ INSERT INTO `t_content` VALUES (2, '空');
 DROP TABLE IF EXISTS `t_question`;
 CREATE TABLE `t_question`  (
   `id` int NOT NULL AUTO_INCREMENT,
-  `subject` int NULL DEFAULT NULL,
+  `subject_id` int NULL DEFAULT NULL,
   `ques_content` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NULL DEFAULT NULL,
   `ans_content` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NULL DEFAULT NULL,
   `correct` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NULL DEFAULT NULL,
@@ -60,8 +60,8 @@ INSERT INTO `t_question` VALUES (3, 10, '3', '4', '3', 5, '填空');
 DROP TABLE IF EXISTS `t_subject`;
 CREATE TABLE `t_subject`  (
   `id` int NOT NULL AUTO_INCREMENT,
-  `subject` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NULL DEFAULT NULL,
-  `grade` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NULL DEFAULT NULL,
+  `subject_name` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NULL DEFAULT NULL,
+  `grade_name` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NULL DEFAULT NULL,
   PRIMARY KEY (`id`) USING BTREE
 ) ENGINE = InnoDB CHARACTER SET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci ROW_FORMAT = Dynamic;
 
@@ -72,8 +72,11 @@ INSERT INTO `t_subject` VALUES (7, '数学', '高一');
 INSERT INTO `t_subject` VALUES (10, '数学', '高二');
 INSERT INTO `t_subject` VALUES (11, '阿斯顿', '牛逼');
 INSERT INTO `t_subject` VALUES (12, '阿斯顿', '啊实打实的d');
-INSERT INTO `t_subject` VALUES (16, '语文', '阿三顶顶');
+INSERT INTO `t_subject` VALUES (16, '语文', '高一');
 INSERT INTO `t_subject` VALUES (26, '数学', '小学一年级');
-INSERT INTO `t_subject` VALUES (27, '的', '高');
+INSERT INTO `t_subject` VALUES (27, '化学', '高三');
+INSERT INTO `t_subject` VALUES (29, 'asd1', '撒旦');
+INSERT INTO `t_subject` VALUES (30, '阿斯顿', '撒啊');
+INSERT INTO `t_subject` VALUES (31, '阿斯顿', '阿斯顿');
 
 SET FOREIGN_KEY_CHECKS = 1;

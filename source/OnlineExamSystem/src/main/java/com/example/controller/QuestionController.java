@@ -33,7 +33,7 @@ public class QuestionController {
         List<Question> questions = questionService.list();
         List<QuestionVM> vms = new ArrayList<>();
         questions.forEach(question -> {
-            Subject subject = subjectService.getById(question.getSubject());
+            Subject subject = subjectService.getById(question.getSubjectId());
             QuestionVM vm = new QuestionVM(subject, question);
             vms.add(vm);
         });
