@@ -20,7 +20,7 @@ import java.util.List;
 @RestController
 @RequestMapping("/subjects")
 public class SubjectController {
-    private SubjectService subjectService;
+    private final SubjectService subjectService;
     private final Logger logger = LoggerFactory.getLogger(SubjectController.class);
 
     @Autowired

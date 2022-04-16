@@ -19,8 +19,8 @@ public class RestResponse<T> {
         this.code = code;
     }
 
-    public static RestResponse success(Object data) {
-        return new RestResponse(data);
+    public static  RestResponse success(Object data) {
+        return new RestResponse<>(data);
     }
 
     public static RestResponse success() {
