@@ -3,8 +3,10 @@ package com.example.controller;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
+import com.example.domain.Question;
 import com.example.domain.RestResponse;
 import com.example.domain.Subject;
+import com.example.service.QuestionService;
 import com.example.service.SubjectService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -21,11 +23,13 @@ import java.util.List;
 @RequestMapping("/subjects")
 public class SubjectController {
     private final SubjectService subjectService;
+    private final QuestionService questionService;
     private final Logger logger = LoggerFactory.getLogger(SubjectController.class);
 
     @Autowired
-    public SubjectController(SubjectService subjectService) {
+    public SubjectController(SubjectService subjectService, QuestionService questionService) {
         this.subjectService = subjectService;
+        this.questionService = questionService;
     }
 
     @RequestMapping(value = "/grade",method = RequestMethod.GET)
@@ -60,6 +64,7 @@ public class SubjectController {
     @RequestMapping(value = "{id}", method = RequestMethod.DELETE)
     public RestResponse deleteSubject(@PathVariable Integer id) {
         subjectService.removeById(id);
+        questionService.remove(new LambdaQueryWrapper<Question>().eq(Question::getSubjectId, id));
         return RestResponse.success();
     }
 

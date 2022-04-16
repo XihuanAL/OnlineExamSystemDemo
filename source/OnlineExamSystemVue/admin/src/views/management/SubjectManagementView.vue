@@ -70,7 +70,7 @@
                   </el-col>
                 </el-row>
               </el-form>
-              <div slot="footer" class="dialog-footer">
+              <div>
                 <el-button @click="cancel()">取消</el-button>
                 <el-button type="primary" @click="handleEditSubject()">确定</el-button>
               </div>
@@ -139,13 +139,12 @@ export default {
       })
     },
     handleEditSubject() {
-      axios.put("http://localhost:80/subjects/", this.formData).then((res) => {
+      axios.put("http://localhost:80/subjects", this.formData).then((res) => {
         this.dialogFormVisible4Edit = false;
         this.getSubjectList();
       })
     },
     editSubject(row) {
-      console.log("edit");
       this.dialogFormVisible4Edit = true;
       axios.get("http://localhost:80/subjects/" + row.id).then((res) => {
         this.formData= res.data.data;
@@ -159,8 +158,6 @@ export default {
       }).then(() => {
         axios.delete("http://localhost:80/subjects/" + row.id).then((res) => {
           this.getSubjectList();
-        }).finally(() => {
-          this.getAll();
         });
       }).catch(() => {
       });

@@ -17,6 +17,7 @@ public class Question {
     }
 
     public Question(QuestionVM vm) {
+        this.id = vm.getId();
         this.quesContent = vm.getQuesContent();
         this.ansContent = vm.getAnsContent();
         this.correct = vm.getCorrect();
