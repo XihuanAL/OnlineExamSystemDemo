@@ -1,7 +1,10 @@
 package com.example.viewmodel.admin;
 
 import com.example.domain.Exam;
+import com.example.domain.Question;
 import lombok.Data;
+
+import java.util.List;
 
 @Data
 public class ExamVM {
@@ -9,7 +12,7 @@ public class ExamVM {
     private String examName;
     private String gradeName;
     private String subjectName;
-
+    private List<Question> questionList;
 
     public ExamVM() {
     }

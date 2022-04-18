@@ -1,5 +1,6 @@
 package com.example.domain;
 
+import com.example.viewmodel.admin.ExamVM;
 import lombok.Data;
 
 import java.util.ArrayList;
@@ -14,7 +15,6 @@ public class Exam {
     public Exam() {
 
     }
-
     public Exam(String examName, Integer subjectId) {
         this.examName = examName;
         this.subjectId = subjectId;

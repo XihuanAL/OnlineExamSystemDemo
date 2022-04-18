@@ -18,7 +18,7 @@
           </el-col>
           <el-col :span="8">
             <el-form-item label="学科" prop="subjectName">
-              <el-select v-model="formData.subjectName" placeholder="请选择" @change="GetTableData()">
+              <el-select v-model="formData.subjectName" placeholder="请选择" @change="getTableData()">
                 <el-option
                     v-for="item in optionsSubject"
                     :key="item.subjectName"
@@ -32,14 +32,14 @@
         <el-row>
           <el-col :span="15">
             <el-form-item label="试卷名" prop="examName">
-              <el-input v-model="formData.quesContent"/>
+              <el-input v-model="formData.examName"/>
             </el-form-item>
           </el-col>
         </el-row>
       </el-form>
-      <el-card v-for="(item,index) in questionList">
-        <div class="question-title">
-          <el-row>
+      <el-card v-show="formData.questionList.length != 0">
+        <div class="question-title" v-for="(item,index) in formData.questionList">
+          <el-row style="margin-bottom: 20px">
             <el-col :span="2">
               <span style="size: B4">题目{{ index + 1 }}:</span>
             </el-col>
@@ -103,13 +103,16 @@ export default {
   data() {
     return {
       dialogFormVisible: false,
-      formData: {},
-      rules: {},
+      formData: {
+        questionList: [],
+      },
+      rules: {
+        examName: [{required: true, message: "请输入试卷名", trigger: 'blur'}],
+        subjectName: [{required: true, message: "请选择学科", trigger: "change"}],
+        gradeName: [{required: true, message: "请选择年级", trigger: "change"}]
+      },
       optionsGrade: [],
       optionsSubject: [],
-      questionList: [
-        {quesContent: '请选择题目'}
-      ],
       tableData: [],
       multipleSelection: [],
       pagination: {
@@ -126,10 +129,29 @@ export default {
     //取消添加题目
     cancel() {
       this.dialogFormVisible = false;
+      this.multipleSelection = this.formData.questionList;
     },
     back() {
+      this.$router.push({path: "/exam"});
     },
     handleAddExam() {
+      console.log(this.formData);
+      axios.post("http://localhost:80/exams", this.formData).then((res) => {
+        if (res.data.code == 200) {
+          this.$message({
+            message: "添加成功",
+            type: "success"
+          });
+          this.dialogFormVisible = false;
+        } else {
+          this.$message({
+            message: "添加失败",
+            type: "error"
+          });
+        }
+      }).catch((err) => {
+        console.log(err);
+      });
     },
     handleFoundOptions4Subject() {
       axios.get("http://localhost:80/subjects?gradeName=" + this.formData.gradeName).then((res) => {
@@ -143,15 +165,18 @@ export default {
     },
     addQuestionIsClick() {
       this.dialogFormVisible = true;
+      this.multipleSelection = this.formData.questionList;
+      this.getTableData();
     },
     handleAddQuestion() {
-      console.log(this.multipleSelection);
+      this.formData.questionList = this.multipleSelection;
+      this.dialogFormVisible = false;
     },
     handleSelectionChange(val) {
       this.multipleSelection = val;
     },
-    GetTableData() {
-      let param = "?subjectName=" + this.pagination.subjectName + "&gradeName=" + this.pagination.gradeName;
+    getTableData() {
+      let param = "?subjectName=" + this.formData.subjectName + "&gradeName=" + this.formData.gradeName;
       axios.get("http://localhost:80/questions/" + this.pagination.currentPage + "/" + this.pagination.pageSize + param).then((res) => {
         this.tableData = res.data.data.records;
         this.pagination.total = res.data.data.total;
@@ -161,7 +186,7 @@ export default {
     },
     handleCurrentChange(currentPage) {
       this.pagination.currentPage = currentPage; //更新当前页码
-      this.GetTableData(); //重新查询
+      this.getTableData(); //重新查询
     },
   }
 }
