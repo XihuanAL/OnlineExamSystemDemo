@@ -17,6 +17,10 @@ const routes = [
         path: '/student',
         component: () => import('../views/management/StudentManagementView.vue')
     },
+    {
+        path:'/exam/add',
+        component: () => import('../views/exampaper/ExamPaperAdd')
+    }
 ]
 
 const router = createRouter({

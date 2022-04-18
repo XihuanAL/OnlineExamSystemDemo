@@ -9,22 +9,15 @@ import java.util.List;
 public class Exam {
     private Integer id;
     private String examName;
-    private List<Integer> questionIdList;
-    private Integer totalScore;
     private Integer subjectId;
 
     public Exam() {
 
     }
 
-    public Exam(String examName, List<Integer> questionIdList, Integer totalScore, Integer subjectId) {
+    public Exam(String examName, Integer subjectId) {
         this.examName = examName;
-        this.questionIdList = questionIdList;
-        this.totalScore = totalScore;
         this.subjectId = subjectId;
     }
 
-    public Exam(List<Integer> questionIdList) {
-        this.questionIdList = questionIdList;
-    }
 }

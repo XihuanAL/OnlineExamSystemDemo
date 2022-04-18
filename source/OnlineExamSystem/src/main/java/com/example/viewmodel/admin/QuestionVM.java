@@ -18,15 +18,6 @@ public class QuestionVM {
     public QuestionVM() {
     }
 
-    public QuestionVM(String gradeName, String subjectName, String quesContent, String correct, Integer score, String type) {
-        this.gradeName = gradeName;
-        this.subjectName = subjectName;
-        this.quesContent = quesContent;
-        this.correct = correct;
-        this.score = score;
-        this.type = type;
-    }
-
     public QuestionVM(Subject subject, Question question) {
         this.id=question.getId();
         this.gradeName=subject.getGradeName();

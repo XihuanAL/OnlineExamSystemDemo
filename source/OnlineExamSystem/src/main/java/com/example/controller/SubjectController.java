@@ -47,10 +47,9 @@ public class SubjectController {
     }
 
     @RequestMapping(method = RequestMethod.GET)
-    public RestResponse<List<Subject>> getSubjects(String gradeName) {
+    public RestResponse<List<Subject>> getSubjectsByGradeNmae(String gradeName) {
         LambdaQueryWrapper<Subject> queryWrapper = new LambdaQueryWrapper<>();
-        if(gradeName == "") gradeName = null;
-        queryWrapper.eq(gradeName != null, Subject::getGradeName , gradeName);
+        queryWrapper.eq(!gradeName.equals("") , Subject::getGradeName , gradeName);
         List<Subject> subjects = subjectService.list(queryWrapper);
         return RestResponse.success(subjects);
     }

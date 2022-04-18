@@ -13,7 +13,7 @@
                     :value="item.gradeName">
                 </el-option>
               </el-select>
-              <el-select v-model="pagination.subjectName" placeholder="请选择">
+              <el-select v-model="pagination.subjectName" placeholder="学科">
                 <el-option
                     v-for="item in optionsSubject"
                     :key="item.subjectName"
@@ -230,14 +230,7 @@ export default {
       optionsQuestionType: [
         {type: '填空题'},
       ],
-      formData: {
-        gradeName: '',
-        subjectName: '',
-        type: '',
-        quesContent: '',
-        correct: '',
-        score: '',
-      },
+      formData: {},
       rules: {},
       dialogFormVisible: false,
       dialogFormVisible4Edit: false,
@@ -255,6 +248,7 @@ export default {
   created() {
     this.getQuestionList();
     this.handleFoundOptions4Grade();
+    this.handleFoundOptions4Subject();
   },
   methods: {
     getQuestionList() {
@@ -299,6 +293,7 @@ export default {
       this.dialogFormVisible4Edit = false;
       this.dialogFormVisible = false;
       this.formData = {};
+      this.handleFoundOptions4Subject();
       console.log("cancel");
     },
     //编辑题目确认
@@ -318,16 +313,19 @@ export default {
     },
     //获得学科列表
     handleFoundOptions4Subject() {
-      if (this.formData.gradeName != '') {
+      if (this.formData.gradeName != null) {
+        console.log("formData");
+        console.log(this.formData);
         axios.get("http://localhost:80/subjects?gradeName=" + this.formData.gradeName).then((res) => {
           this.optionsSubject = res.data.data;
         });
       } else {
+        console.log("pagination :" + this.pagination.gradeName + "!");
         axios.get("http://localhost:80/subjects?gradeName=" + this.pagination.gradeName).then((res) => {
           this.optionsSubject = res.data.data;
+          console.log(this.optionsSubject[0].subjectName);
         });
       }
-
     },
     //获得年级列表
     handleFoundOptions4Grade() {
