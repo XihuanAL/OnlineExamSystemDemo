@@ -142,7 +142,7 @@ export default {
             message: "添加成功",
             type: "success"
           });
-          this.dialogFormVisible = false;
+          this.$router.back()
         } else {
           this.$message({
             message: "添加失败",
