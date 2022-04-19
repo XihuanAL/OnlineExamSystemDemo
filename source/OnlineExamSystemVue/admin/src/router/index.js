@@ -20,6 +20,11 @@ const routes = [
     {
         path:'/exam/add',
         component: () => import('../views/exampaper/ExamPaperAdd')
+    },
+    {
+        path:'/exam/edit',
+        name:"examEdit",
+        component: () => import('../views/exampaper/ExamPaperEdit')
     }
 ]
 

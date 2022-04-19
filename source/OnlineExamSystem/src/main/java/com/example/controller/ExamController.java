@@ -37,11 +37,6 @@ public class ExamController {
         this.questionService = questionService;
     }
 
-    @RequestMapping(value = "/{id}", method = RequestMethod.DELETE)
-    public RestResponse delete(@PathVariable("id") Integer id) {
-        examService.removeById(id);
-        return RestResponse.success();
-    }
 
     @RequestMapping(value = "{currentPage}/{pageSize}", method = RequestMethod.GET)
     public RestResponse getQuestionPage(@PathVariable Integer currentPage, @PathVariable Integer pageSize) {
@@ -65,14 +60,34 @@ public class ExamController {
     @RequestMapping(method = RequestMethod.POST)
     public RestResponse addExam(@RequestBody ExamVM examVM) {
         LambdaQueryWrapper<Subject> wrapper = new LambdaQueryWrapper<>();
-        logger.info("GradeName: " + examVM.getGradeName());
-        logger.info("SubjectName: " + examVM.getSubjectName());
         wrapper.eq(Subject::getGradeName, examVM.getGradeName());
         wrapper.eq(Subject::getSubjectName, examVM.getSubjectName());
         Subject subject = subjectService.getOne(wrapper);
-        logger.info("subject: {}", subject);
         Exam exam = new Exam(examVM.getExamName(), subject.getId());
         examService.save(exam);
+        examQuestionService.saveBatch(examVM.getQuestionList().stream().map(question -> {
+           return new ExamQuestion(exam.getId(), question.getId());
+        }).collect(Collectors.toCollection(ArrayList::new)));
+        return RestResponse.success();
+    }
+
+    @RequestMapping(value = "{id}", method = RequestMethod.DELETE)
+    public RestResponse deleteExamById(@PathVariable Integer id) {
+        examService.removeById(id);
+        examQuestionService.remove(new LambdaQueryWrapper<ExamQuestion>().eq(ExamQuestion::getExamId, id));
+        return RestResponse.success();
+    }
+
+    @RequestMapping(method = RequestMethod.PUT)
+    public RestResponse updateExam(@RequestBody ExamVM examVM) {
+        LambdaQueryWrapper<Subject> wrapper = new LambdaQueryWrapper<>();
+        wrapper.eq(Subject::getGradeName, examVM.getGradeName());
+        wrapper.eq(Subject::getSubjectName, examVM.getSubjectName());
+        Subject subject = subjectService.getOne(wrapper);
+        Exam exam = new Exam(examVM.getExamName(), subject.getId());
+        exam.setId(examVM.getId());
+        examService.updateById(exam);
+        examQuestionService.remove(new LambdaQueryWrapper<ExamQuestion>().eq(ExamQuestion::getExamId, exam.getId()));
         examQuestionService.saveBatch(examVM.getQuestionList().stream().map(question -> {
            return new ExamQuestion(exam.getId(), question.getId());
         }).collect(Collectors.toCollection(ArrayList::new)));
