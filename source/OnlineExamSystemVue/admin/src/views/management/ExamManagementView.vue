@@ -62,7 +62,6 @@
 </template>
 
 <script>
-const axios = require('axios');
 
 export default {
   name: "ExamManagementView.vue",
@@ -87,7 +86,7 @@ export default {
   methods: {
     getExamList() {
       console.log("getExamList");
-      axios.get("http://localhost:80/exams/" + this.pagination.currentPage + "/" + this.pagination.pageSize).then((res) => {
+      this.$axios.get("http://localhost:80/exams/" + this.pagination.currentPage + "/" + this.pagination.pageSize).then((res) => {
         this.examList = res.data.data.records;
         console.log(this.examList);
         this.pagination.total = res.data.data.total;
@@ -105,7 +104,7 @@ export default {
         cancelButtonText: '取消',
         type: 'warning'
       }).then(() => {
-        axios.delete("http://localhost:80/exams/" + row.id).then((res) => {
+        this.$axios.delete("http://localhost:80/exams/" + row.id).then((res) => {
           this.getExamList();
         });
       }).catch(() => {

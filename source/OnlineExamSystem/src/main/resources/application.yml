@@ -16,3 +16,11 @@ mybatis-plus:
       id-type: auto
   configuration:
     log-impl: org.apache.ibatis.logging.stdout.StdOutImpl
+
+
+jwt:
+  secret: d2d1d5afhj1sdad1k3hojsadjhi1asd1
+  expire: 604800
+  header: Authorization
+
+

@@ -39,7 +39,6 @@
 </template>
 
 <script>
-const axios = require('axios');
 
 export default {
   name: "StudentManagementView.vue",
@@ -58,7 +57,7 @@ export default {
   },
   methods: {
     getStudentList(){
-      axios.get("http://localhost:80/students/" + this.pagination.currentPage + "/" + this.pagination.pageSize)
+      this.$axios.get("http://localhost:80/students/" + this.pagination.currentPage + "/" + this.pagination.pageSize)
           .then((res)=>{
             this.studentList = res.data.data.records;
             this.pagination.total = res.data.data.total;

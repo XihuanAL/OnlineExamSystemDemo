@@ -4,18 +4,18 @@ import lombok.Data;
 
 @Data
 public class RestResponse<T> {
-    private String message;
+    private String msg;
     private String code;
     private T data;
 
     public RestResponse(T data) {
         this.code = "200";
-        this.message = "success";
+        this.msg = "success";
         this.data = data;
     }
 
-    public RestResponse(String message, String code) {
-        this.message = message;
+    public RestResponse(String msg, String code) {
+        this.msg = msg;
         this.code = code;
     }
 
@@ -25,5 +25,9 @@ public class RestResponse<T> {
 
     public static RestResponse success() {
         return new RestResponse("success", "200");
+    }
+
+    public static  RestResponse fail(String message) {
+        return new RestResponse(message, "500");
     }
 }

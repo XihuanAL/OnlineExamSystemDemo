@@ -81,7 +81,6 @@
 </template>
 
 <script>
-const axios = require('axios'); // 在webpack中引入axios
 
 export default {
   name: "SubjectManagementView.vue",
@@ -113,7 +112,7 @@ export default {
   methods: {
     getSubjectList() {
       let param = "?" + "subjectName=" + this.pagination.subjectName + "&gradeName=" + this.pagination.gradeName;
-      axios.get("http://localhost:80/subjects/" + this.pagination.currentPage + "/" + this.pagination.pageSize + param).then((res) => {
+      this.$axios.get("http://localhost:80/subjects/" + this.pagination.currentPage + "/" + this.pagination.pageSize + param).then((res) => {
         this.subjectList = res.data.data.records;
         this.pagination.total = res.data.data.total;
         this.pagination.currentPage = res.data.data.current;
@@ -133,20 +132,20 @@ export default {
       this.dialogFormVisible = true;
     },
     handleAddSubject() {
-      axios.post("http://localhost:80/subjects", this.formData).then((res) => {
+      this.$axios.post("http://localhost:80/subjects", this.formData).then((res) => {
         this.dialogFormVisible = false;
         this.getSubjectList();
       })
     },
     handleEditSubject() {
-      axios.put("http://localhost:80/subjects", this.formData).then((res) => {
+      this.$axios.put("http://localhost:80/subjects", this.formData).then((res) => {
         this.dialogFormVisible4Edit = false;
         this.getSubjectList();
       })
     },
     editSubject(row) {
       this.dialogFormVisible4Edit = true;
-      axios.get("http://localhost:80/subjects/" + row.id).then((res) => {
+      this.$axios.get("http://localhost:80/subjects/" + row.id).then((res) => {
         this.formData= res.data.data;
       })
     },
@@ -156,7 +155,7 @@ export default {
         cancelButtonText: '取消',
         type: 'warning'
       }).then(() => {
-        axios.delete("http://localhost:80/subjects/" + row.id).then((res) => {
+        this.$axios.delete("http://localhost:80/subjects/" + row.id).then((res) => {
           this.getSubjectList();
         });
       }).catch(() => {

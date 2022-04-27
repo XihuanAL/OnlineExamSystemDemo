@@ -97,7 +97,6 @@
 
 
 <script>
-import axios from "axios";
 
 export default {
   name: "ExamPaperEdit",
@@ -143,7 +142,7 @@ export default {
     },
     handleAddExam() {
       //console.log(this.formData);
-      axios.put("http://localhost:80/exams", this.formData).then((res) => {
+      this.$axios.put("http://localhost:80/exams", this.formData).then((res) => {
         //TODO
         if (res.data.code == 200) {
           this.$message({
@@ -162,12 +161,12 @@ export default {
       });
     },
     handleFoundOptions4Subject() {
-      axios.get("http://localhost:80/subjects?gradeName=" + this.formData.gradeName).then((res) => {
+      this.$axios.get("http://localhost:80/subjects?gradeName=" + this.formData.gradeName).then((res) => {
         this.optionsSubject = res.data.data;
       });
     },
     handleFoundOptions4Grade() {
-      axios.get("http://localhost:80/subjects/grade").then((res) => {
+      this.$axios.get("http://localhost:80/subjects/grade").then((res) => {
         this.optionsGrade = res.data.data;
       });
     },
@@ -185,7 +184,7 @@ export default {
     },
     getTableData() {
       let param = "?subjectName=" + this.formData.subjectName + "&gradeName=" + this.formData.gradeName;
-      axios.get("http://localhost:80/questions/" + this.pagination.currentPage + "/" + this.pagination.pageSize + param).then((res) => {
+      this.$axios.get("http://localhost:80/questions/" + this.pagination.currentPage + "/" + this.pagination.pageSize + param).then((res) => {
         this.tableData = res.data.data.records;
         this.pagination.total = res.data.data.total;
         this.pagination.currentPage = res.data.data.current;
