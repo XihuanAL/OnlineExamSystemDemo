@@ -5,7 +5,7 @@
         <el-card>
           <div slot="header" class="clearfix">
             <div>
-              <el-select v-model="pagination.gradeName" placeholder="年级" @change="handleFoundOptions4Subject()">
+              <el-select v-model="pagination.gradeName" placeholder="年级" @change="handleFoundOptions4Subject2Select()">
                 <el-option
                     v-for="item in optionsGrade"
                     :key="item.gradeName"
@@ -69,7 +69,7 @@
                 <el-row>
                   <el-col :span="12">
                     <el-form-item label="年级" prop="gradeName">
-                      <el-select v-model="formData.gradeName" placeholder="请选择" @change="handleFoundOptions4Subject()">
+                      <el-select v-model="formData.gradeName" placeholder="请选择" @change="handleFoundOptions4Subject2Form()">
                         <el-option
                             v-for="item in optionsGrade"
                             :key="item.gradeName"
@@ -145,7 +145,7 @@
                 <el-row>
                   <el-col :span="12">
                     <el-form-item label="年级" prop="gradeName">
-                      <el-select v-model="formData.gradeName" placeholder="请选择" @change="handleFoundOptions4Subject()">
+                      <el-select v-model="formData.gradeName" placeholder="请选择" @change="handleFoundOptions4Subject2Form()">
                         <el-option
                             v-for="item in optionsGrade"
                             :key="item.gradeName"
@@ -247,7 +247,6 @@ export default {
   created() {
     this.getQuestionList();
     this.handleFoundOptions4Grade();
-    this.handleFoundOptions4Subject();
   },
   methods: {
     getQuestionList() {
@@ -265,7 +264,6 @@ export default {
     },
     createQuestionIsClick() {
       this.handleFoundOptions4Grade();
-      this.handleFoundOptions4Subject();
       this.dialogFormVisible = true;
       this.formData = {};
     },
@@ -292,7 +290,6 @@ export default {
       this.dialogFormVisible4Edit = false;
       this.dialogFormVisible = false;
       this.formData = {};
-      this.handleFoundOptions4Subject();
       console.log("cancel");
     },
     //编辑题目确认
@@ -311,21 +308,28 @@ export default {
       this.formData = {};
     },
     //获得学科列表
-    handleFoundOptions4Subject() {
-      if (this.formData.gradeName != null) {
-        console.log("formData");
-        console.log(this.formData);
-        this.$axios.get("http://localhost:80/subjects?gradeName=" + this.formData.gradeName).then((res) => {
-          this.optionsSubject = res.data.data;
-        });
-      } else {
-        console.log("pagination :" + this.pagination.gradeName + "!");
-        this.$axios.get("http://localhost:80/subjects?gradeName=" + this.pagination.gradeName).then((res) => {
-          this.optionsSubject = res.data.data;
-          console.log(this.optionsSubject[0].subjectName);
-        });
-      }
+    handleFoundOptions4Subject2Select() {
+      this.$axios.get("http://localhost:80/subjects?gradeName=" + this.pagination.gradeName).then((res) => {
+        this.optionsSubject = res.data.data;
+      });
     },
+    handleFoundOptions4Subject2Form(){
+      this.$axios.get("http://localhost:80/subjects?gradeName=" + this.formData.gradeName).then((res) => {
+        this.optionsSubject = res.data.data;
+      });
+    },
+    // handleFoundOptions4Subject() {
+    //   if (this.formData.gradeName != null && this.formData.gradeName !== "") {
+    //     this.$axios.get("http://localhost:80/subjects?gradeName=" + this.formData.gradeName).then((res) => {
+    //       this.optionsSubject = res.data.data;
+    //     });
+    //   } else {
+    //     this.$axios.get("http://localhost:80/subjects?gradeName=" + this.pagination.gradeName).then((res) => {
+    //       this.optionsSubject = res.data.data;
+    //       console.log(this.optionsSubject[0].subjectName);
+    //     });
+    //   }
+    // },
     //获得年级列表
     handleFoundOptions4Grade() {
       this.$axios.get("http://localhost:80/subjects/grade").then((res) => {

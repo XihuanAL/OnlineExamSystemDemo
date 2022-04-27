@@ -1,4 +1,4 @@
-package com.example.controller;
+package com.example.controller.admin;
 
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
@@ -9,8 +9,6 @@ import com.example.service.ExamService;
 import com.example.service.QuestionService;
 import com.example.service.SubjectService;
 import com.example.viewmodel.admin.ExamVM;
-import com.example.viewmodel.admin.QuestionVM;
-import lombok.val;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;

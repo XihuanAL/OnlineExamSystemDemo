@@ -6,7 +6,7 @@
           <div slot="header" class="clearfix">
             <div>
               <el-button @click="getStudentList()" class="dalfBut">查询</el-button>
-              <el-button type="primary">新建</el-button>
+              <el-button type="primary" @click="createStudent()">新建</el-button>
             </div>
           </div>
           <el-table :data="studentList" style="width: 100%">
@@ -64,6 +64,9 @@ export default {
             this.pagination.currentPage = res.data.data.current;
             this.pagination.pageSize = res.data.data.size;
       })
+    },
+    createStudent(){
+      //TODO
     },
     handleCurrentChange(currentPage) {
       this.pagination.currentPage = currentPage; //更新当前页码

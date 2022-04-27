@@ -25,18 +25,20 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     private final MyAccessDeniedHandler myAccessDeniedHandler;
     private final MyAuthenticationEntryPoint myAuthenticationEntryPoint;
     private final MyLogoutSuccessHandler myLogoutSuccessHandler;
+    private final MyLoginFailureHandler myLoginFailureHandler;
     @Bean
     MyAuthenticationFilter myAuthenticationFilter() throws Exception {
         return new MyAuthenticationFilter(authenticationManager());
     }
 
     @Autowired
-    public SecurityConfig(MyAuthenticationProvider myAuthenticationProvider, MyLoginSuccessHandler myLoginSuccessHandler, MyAccessDeniedHandler myaccessDeniedHandler, MyAuthenticationEntryPoint myAuthenticationEntryPoint, MyLogoutSuccessHandler myLogoutSuccessHandler) {
+    public SecurityConfig(MyAuthenticationProvider myAuthenticationProvider, MyLoginSuccessHandler myLoginSuccessHandler, MyAccessDeniedHandler myaccessDeniedHandler, MyAuthenticationEntryPoint myAuthenticationEntryPoint, MyLogoutSuccessHandler myLogoutSuccessHandler, MyLoginFailureHandler myLoginFailureHandler) {
         this.myAuthenticationProvider = myAuthenticationProvider;
         this.myLoginSuccessHandler = myLoginSuccessHandler;
         this.myAccessDeniedHandler = myaccessDeniedHandler;
         this.myAuthenticationEntryPoint = myAuthenticationEntryPoint;
         this.myLogoutSuccessHandler = myLogoutSuccessHandler;
+        this.myLoginFailureHandler = myLoginFailureHandler;
     }
 
     @Override
@@ -46,6 +48,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .authenticationProvider(myAuthenticationProvider)
                 .formLogin().permitAll()
                 .successHandler(myLoginSuccessHandler)
+                .failureHandler(myLoginFailureHandler)
 
                 .and()
                 .logout()
@@ -53,7 +56,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 //路由
                 .and().authorizeRequests()
                 .antMatchers("/login").permitAll()
-                .anyRequest().authenticated()
+                .anyRequest().hasRole("ADMIN")
 
                 //异常处理器
                 .and()
