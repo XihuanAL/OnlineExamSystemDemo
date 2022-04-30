@@ -135,8 +135,8 @@ export default {
       this.$router.push({path: "/exam"});
     },
     handleAddExam() {
-      console.log(this.formData);
-      this.$axios.post("http://localhost:80/exams", this.formData).then((res) => {
+      //console.log(this.formData);
+      this.$axios.post("/exams", this.formData).then((res) => {
         if (res.data.code == 200) {
           this.$message({
             message: "添加成功",
@@ -150,16 +150,16 @@ export default {
           });
         }
       }).catch((err) => {
-        console.log(err);
+        //console.log(err);
       });
     },
     handleFoundOptions4Subject() {
-      this.$axios.get("http://localhost:80/subjects?gradeName=" + this.formData.gradeName).then((res) => {
+      this.$axios.get("/subjects?gradeName=" + this.formData.gradeName).then((res) => {
         this.optionsSubject = res.data.data;
       });
     },
     handleFoundOptions4Grade() {
-      this.$axios.get("http://localhost:80/subjects/grade").then((res) => {
+      this.$axios.get("/subjects/grade").then((res) => {
         this.optionsGrade = res.data.data;
       });
     },
@@ -177,7 +177,7 @@ export default {
     },
     getTableData() {
       let param = "?subjectName=" + this.formData.subjectName + "&gradeName=" + this.formData.gradeName;
-      this.$axios.get("http://localhost:80/questions/" + this.pagination.currentPage + "/" + this.pagination.pageSize + param).then((res) => {
+      this.$axios.get("/questions/" + this.pagination.currentPage + "/" + this.pagination.pageSize + param).then((res) => {
         this.tableData = res.data.data.records;
         this.pagination.total = res.data.data.total;
         this.pagination.currentPage = res.data.data.current;

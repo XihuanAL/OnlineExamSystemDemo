@@ -10,7 +10,7 @@ const request = axios.create({
     }
 })
 request.interceptors.request.use(config => {
-    console.log("请求拦截器", config)
+    //console.log("请求拦截器", config)
     config.headers["Authorization"] = localStorage.getItem("token")
     return config
 })

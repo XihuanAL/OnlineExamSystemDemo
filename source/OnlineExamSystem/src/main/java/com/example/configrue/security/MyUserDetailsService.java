@@ -37,6 +37,7 @@ public class MyUserDetailsService implements UserDetailsService {
         }
         List<GrantedAuthority> authorities = new ArrayList<>();
         authorities.add(new SimpleGrantedAuthority("ROLE_" + user.getRole()));
+        //logger.info(new BCryptPasswordEncoder().encode(user.getPassword()));
         return new org.springframework.security.core.userdetails.User(username, user.getPassword(), authorities);
     }
 }

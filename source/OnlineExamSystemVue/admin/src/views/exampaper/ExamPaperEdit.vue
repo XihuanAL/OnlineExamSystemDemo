@@ -142,9 +142,9 @@ export default {
     },
     handleAddExam() {
       //console.log(this.formData);
-      this.$axios.put("http://localhost:80/exams", this.formData).then((res) => {
+      this.$axios.put("/exams", this.formData).then((res) => {
         //TODO
-        if (res.data.code == 200) {
+        if (res.data.code === 200) {
           this.$message({
             message: "修改成功",
             type: "success"
@@ -157,16 +157,16 @@ export default {
           });
         }
       }).catch((err) => {
-        console.log(err);
+        //console.log(err);
       });
     },
     handleFoundOptions4Subject() {
-      this.$axios.get("http://localhost:80/subjects?gradeName=" + this.formData.gradeName).then((res) => {
+      this.$axios.get("/subjects?gradeName=" + this.formData.gradeName).then((res) => {
         this.optionsSubject = res.data.data;
       });
     },
     handleFoundOptions4Grade() {
-      this.$axios.get("http://localhost:80/subjects/grade").then((res) => {
+      this.$axios.get("/subjects/grade").then((res) => {
         this.optionsGrade = res.data.data;
       });
     },
@@ -184,7 +184,7 @@ export default {
     },
     getTableData() {
       let param = "?subjectName=" + this.formData.subjectName + "&gradeName=" + this.formData.gradeName;
-      this.$axios.get("http://localhost:80/questions/" + this.pagination.currentPage + "/" + this.pagination.pageSize + param).then((res) => {
+      this.$axios.get("/questions/" + this.pagination.currentPage + "/" + this.pagination.pageSize + param).then((res) => {
         this.tableData = res.data.data.records;
         this.pagination.total = res.data.data.total;
         this.pagination.currentPage = res.data.data.current;

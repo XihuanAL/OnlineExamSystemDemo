@@ -3,9 +3,9 @@ package com.example.controller.admin;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
-import com.example.domain.Question;
-import com.example.domain.RestResponse;
-import com.example.domain.Subject;
+import com.example.domain.*;
+import com.example.service.ExamQuestionService;
+import com.example.service.ExamService;
 import com.example.service.QuestionService;
 import com.example.service.SubjectService;
 import org.slf4j.Logger;
@@ -24,12 +24,16 @@ import java.util.List;
 public class SubjectController {
     private final SubjectService subjectService;
     private final QuestionService questionService;
+    private final ExamQuestionService examQuestionService;
+    private final ExamService examService;
     private final Logger logger = LoggerFactory.getLogger(SubjectController.class);
 
     @Autowired
-    public SubjectController(SubjectService subjectService, QuestionService questionService) {
+    public SubjectController(SubjectService subjectService, QuestionService questionService, ExamQuestionService examQuestionService, ExamService examService) {
         this.subjectService = subjectService;
         this.questionService = questionService;
+        this.examQuestionService = examQuestionService;
+        this.examService = examService;
     }
 
     @RequestMapping(value = "/grade",method = RequestMethod.GET)
@@ -55,7 +59,7 @@ public class SubjectController {
     }
 
     @RequestMapping(method = RequestMethod.POST)
-    public RestResponse getSubject(@RequestBody Subject subject) {
+    public RestResponse addSubject(@RequestBody Subject subject) {
         subjectService.save(subject);
         return RestResponse.success();
     }
@@ -63,6 +67,8 @@ public class SubjectController {
     @RequestMapping(value = "{id}", method = RequestMethod.DELETE)
     public RestResponse deleteSubject(@PathVariable Integer id) {
         subjectService.removeById(id);
+        examService.remove(new LambdaQueryWrapper<Exam>().eq(Exam::getSubjectId, id));
+        examQuestionService.remove(new LambdaQueryWrapper<ExamQuestion>().in(!questionService.list(new LambdaQueryWrapper<Question>().eq(Question::getSubjectId, id)).isEmpty() , ExamQuestion::getQuestionId, questionService.list(new LambdaQueryWrapper<Question>().eq(Question::getSubjectId, id)).stream().map(Question::getId).toArray()));
         questionService.remove(new LambdaQueryWrapper<Question>().eq(Question::getSubjectId, id));
         return RestResponse.success();
     }

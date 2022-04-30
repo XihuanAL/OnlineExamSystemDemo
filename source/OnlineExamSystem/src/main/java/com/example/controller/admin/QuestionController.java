@@ -3,9 +3,11 @@ package com.example.controller.admin;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
+import com.example.domain.ExamQuestion;
 import com.example.domain.Question;
 import com.example.domain.RestResponse;
 import com.example.domain.Subject;
+import com.example.service.ExamQuestionService;
 import com.example.service.QuestionService;
 import com.example.service.SubjectService;
 import com.example.viewmodel.admin.QuestionVM;
@@ -20,11 +22,13 @@ import java.util.List;
 public class QuestionController {
     private final QuestionService questionService;
     private final SubjectService subjectService;
+    private final ExamQuestionService examQuestionService;
 
     @Autowired
-    public QuestionController(QuestionService questionService, SubjectService subjectService) {
+    public QuestionController(QuestionService questionService, SubjectService subjectService, ExamQuestionService examQuestionService) {
         this.questionService = questionService;
         this.subjectService = subjectService;
+        this.examQuestionService = examQuestionService;
     }
 
     @RequestMapping(value = "{currentPage}/{pageSize}", method = RequestMethod.GET)
@@ -82,6 +86,7 @@ public class QuestionController {
     @RequestMapping(value = "{id}", method = RequestMethod.DELETE)
     public RestResponse deleteQuestion(@PathVariable Integer id) {
         questionService.removeById(id);
+        examQuestionService.remove(new LambdaQueryWrapper<ExamQuestion>().eq(ExamQuestion::getQuestionId, id));
         return RestResponse.success();
     }
 }

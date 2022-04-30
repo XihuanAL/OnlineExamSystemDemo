@@ -1,5 +1,8 @@
 package com.example.configrue.security;
 
+import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
+import com.example.service.UserService;
+import lombok.val;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,15 +26,16 @@ public class MyAuthenticationProvider implements AuthenticationProvider {
     private final Logger logger = LoggerFactory.getLogger(MyAuthenticationProvider.class);
     @Autowired
     private MyUserDetailsService myUserDetailsService;
-
+    @Autowired
+    private UserService userService;
     @Override
     public Authentication authenticate(Authentication authentication) throws AuthenticationException {
         String username = authentication.getName();
         String password = authentication.getCredentials().toString();
 
         User user = myUserDetailsService.loadUserByUsername(username);
-        logger.info("password1: " + user.getPassword());
-        logger.info("password2: " + password);
+//        logger.info("password1: " + user.getPassword());
+//        logger.info("password2: " + password);
         if (user == null) {
             throw new UsernameNotFoundException("User not found");
         }
@@ -46,9 +50,12 @@ public class MyAuthenticationProvider implements AuthenticationProvider {
         if (!user.isAccountNonLocked()) {
             throw new LockedException("Account is locked");
         }
-        logger.info("User {} successfully authenticated", username);
+        //logger.info("User {} successfully authenticated", username);
         ArrayList<GrantedAuthority> grantedAuthorities = new ArrayList<>();
-        grantedAuthorities.add(new SimpleGrantedAuthority("ROLE_USER"));
+        LambdaQueryWrapper<com.example.domain.User> wrapper = new LambdaQueryWrapper<>();
+        wrapper.eq(com.example.domain.User::getUsername, username);
+        com.example.domain.User userdomain = userService.getOne(wrapper);
+        grantedAuthorities.add(new SimpleGrantedAuthority("ROLE_" + userdomain.getRole()));
 
         return new UsernamePasswordAuthenticationToken(user, password, grantedAuthorities);
     }

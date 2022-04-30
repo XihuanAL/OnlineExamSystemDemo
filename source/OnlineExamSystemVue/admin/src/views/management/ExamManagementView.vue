@@ -85,10 +85,10 @@ export default {
   },
   methods: {
     getExamList() {
-      console.log("getExamList");
-      this.$axios.get("http://localhost:80/exams/" + this.pagination.currentPage + "/" + this.pagination.pageSize).then((res) => {
+      //console.log("getExamList");
+      this.$axios.get("/exams/" + this.pagination.currentPage + "/" + this.pagination.pageSize).then((res) => {
         this.examList = res.data.data.records;
-        console.log(this.examList);
+        //console.log(this.examList);
         this.pagination.total = res.data.data.total;
         this.pagination.currentPage = res.data.data.current;
         this.pagination.pageSize = res.data.data.size;
@@ -104,15 +104,15 @@ export default {
         cancelButtonText: '取消',
         type: 'warning'
       }).then(() => {
-        this.$axios.delete("http://localhost:80/exams/" + row.id).then((res) => {
+        this.$axios.delete("/exams/" + row.id).then((res) => {
           this.getExamList();
         });
       }).catch(() => {
       });
     },
     editExam(row) {
-      console.log("row");
-      console.log(row);
+      //console.log("row");
+      //console.log(row);
       this.$router.push({
         name:"examEdit",
         params: {

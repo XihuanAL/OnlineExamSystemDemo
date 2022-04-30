@@ -230,7 +230,17 @@ export default {
         {type: '填空题'},
       ],
       formData: {},
-      rules: {},
+      rules: {
+        quesContent: [
+          {required: true, message: '请输入题目', trigger: 'blur'},
+        ],
+        correct: [
+          {required: true, message: '请输入答案', trigger: 'blur'},
+        ],
+        score: [
+          {required: true, message: '请输入分值', trigger: 'blur'},
+        ],
+      },
       dialogFormVisible: false,
       dialogFormVisible4Edit: false,
       questionList: [],
@@ -251,7 +261,7 @@ export default {
   methods: {
     getQuestionList() {
       let param = "?quesContent=" + this.pagination.quesContent + "&subjectName=" + this.pagination.subjectName + "&gradeName=" + this.pagination.gradeName;
-      this.$axios.get("http://localhost:80/questions/" + this.pagination.currentPage + "/" + this.pagination.pageSize + param).then((res) => {
+      this.$axios.get("/questions/" + this.pagination.currentPage + "/" + this.pagination.pageSize + param).then((res) => {
         this.questionList = res.data.data.records;
         this.pagination.total = res.data.data.total;
         this.pagination.currentPage = res.data.data.current;
@@ -268,7 +278,7 @@ export default {
       this.formData = {};
     },
     edit(row) {
-      this.$axios.get("http://localhost:80/questions/" + row.id).then((res) => {
+      this.$axios.get("/questions/" + row.id).then((res) => {
         this.formData = res.data.data;
       })
       this.handleFoundOptions4Grade();
@@ -280,7 +290,7 @@ export default {
         cancelButtonText: '取消',
         type: 'warning'
       }).then(() => {
-        this.$axios.delete("http://localhost:80/questions/" + row.id).then((res) => {
+        this.$axios.delete("/questions/" + row.id).then((res) => {
           this.getQuestionList();
         });
       }).catch(() => {
@@ -290,18 +300,18 @@ export default {
       this.dialogFormVisible4Edit = false;
       this.dialogFormVisible = false;
       this.formData = {};
-      console.log("cancel");
+      //console.log("cancel");
     },
     //编辑题目确认
     handleEditQuestion() {
-      this.$axios.put("http://localhost:80/questions/", this.formData).then((res) => {
+      this.$axios.put("/questions/", this.formData).then((res) => {
         this.dialogFormVisible4Edit = false;
         this.getQuestionList();
       })
     },
     //添加题目确认
     handleAddQuestion() {
-      this.$axios.post("http://localhost:80/questions", this.formData).then((res) => {
+      this.$axios.post("/questions", this.formData).then((res) => {
         this.dialogFormVisible = false;
         this.getQuestionList();
       });
@@ -309,12 +319,12 @@ export default {
     },
     //获得学科列表
     handleFoundOptions4Subject2Select() {
-      this.$axios.get("http://localhost:80/subjects?gradeName=" + this.pagination.gradeName).then((res) => {
+      this.$axios.get("/subjects?gradeName=" + this.pagination.gradeName).then((res) => {
         this.optionsSubject = res.data.data;
       });
     },
     handleFoundOptions4Subject2Form(){
-      this.$axios.get("http://localhost:80/subjects?gradeName=" + this.formData.gradeName).then((res) => {
+      this.$axios.get("/subjects?gradeName=" + this.formData.gradeName).then((res) => {
         this.optionsSubject = res.data.data;
       });
     },
@@ -332,7 +342,7 @@ export default {
     // },
     //获得年级列表
     handleFoundOptions4Grade() {
-      this.$axios.get("http://localhost:80/subjects/grade").then((res) => {
+      this.$axios.get("/subjects/grade").then((res) => {
         this.optionsGrade = res.data.data;
       });
     },

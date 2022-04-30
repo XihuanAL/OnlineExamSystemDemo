@@ -22,8 +22,8 @@ public class SubjectServiceImpl extends ServiceImpl<SubjectMapper, Subject> impl
 
     public List<Subject> getByNames(String gradeName, String subjectName){
         LambdaQueryWrapper<Subject> queryWrapper = new LambdaQueryWrapper<>();
-        queryWrapper.eq(gradeName != "" ,Subject::getGradeName, gradeName);
-        queryWrapper.eq(subjectName != "" ,Subject::getSubjectName, subjectName);
+        queryWrapper.eq(!gradeName.equals("")  ,Subject::getGradeName, gradeName);
+        queryWrapper.eq(!subjectName.equals("") ,Subject::getSubjectName, subjectName);
         return subjectMapper.selectList(queryWrapper);
     }
 }

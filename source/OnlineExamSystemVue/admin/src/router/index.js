@@ -4,7 +4,7 @@ const routes = [
     {
         path: '/dashboard',
         component: () => import('../views/Dashboard.vue'),
-        redirect:"/question",
+        redirect:"/subject",
         children: [
             {
                 path: '/exam',

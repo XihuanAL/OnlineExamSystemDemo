@@ -88,12 +88,17 @@ export default {
     submitForm(formName) {
       this.$refs[formName].validate((valid) => {
         if (valid) {
-          console.log("submit!");
-          this.$axios.post("http://localhost:80/login?username=" + this.user.username + "&password=" + this.user.password).then((res) => {
+          //console.log("submit!");
+          this.$axios.post("/login?username=" + this.user.username + "&password=" + this.user.password).then((res) => {
               const jwt = res.headers['authorization'];
-              console.log(jwt);
-              this.$store.commit("SET_TOKEN", jwt);
-              this.$router.push("/dashboard");
+              if(jwt) {
+                this.$store.commit("SET_TOKEN", jwt);
+                this.$router.push("/dashboard");
+              }else {
+                this.$message.error("用户名或密码错误");
+                this.user.password = "";
+              }
+
           })
           // axios.post("http://localhost:80/login?username=" + this.user.username + "&password=" + this.user.password).then((res) => {
           //   console.log(res);
@@ -103,7 +108,7 @@ export default {
           // });
 
         } else {
-          console.log("error submit!!");
+          //console.log("error submit!!");
           return false;
         }
       });
