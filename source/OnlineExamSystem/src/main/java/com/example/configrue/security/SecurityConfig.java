@@ -56,6 +56,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 //路由
                 .and().authorizeRequests()
                 .antMatchers("/login").permitAll()
+                .antMatchers("/student/**").hasRole("STUDENT")
                 .anyRequest().hasRole("ADMIN")
 
                 //异常处理器

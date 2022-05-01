@@ -79,9 +79,12 @@ export default {
     };
   },
   created() {
-    let token = localStorage.getItem("token")
-    if(token) {
+    //let token = localStorage.getItem("token")
+    let role = localStorage.getItem("role")
+    if(role === "ROLE_ADMIN"){
       this.$router.push("/dashboard")
+    }else if(role === "ROLE_STUDENT"){
+      this.$router.push("/studentMenu")
     }
   },
   methods: {
@@ -91,9 +94,16 @@ export default {
           //console.log("submit!");
           this.$axios.post("/login?username=" + this.user.username + "&password=" + this.user.password).then((res) => {
               const jwt = res.headers['authorization'];
+              const role = res.data.data;
+              //console.log("role:" + role);
               if(jwt) {
                 this.$store.commit("SET_TOKEN", jwt);
-                this.$router.push("/dashboard");
+                this.$store.commit("SET_ROLE", role);
+                if(role === "ROLE_ADMIN") {
+                  this.$router.push("/dashboard")
+                } else {
+                  this.$router.push("/studentMenu")
+                }
               }else {
                 this.$message.error("用户名或密码错误");
                 this.user.password = "";

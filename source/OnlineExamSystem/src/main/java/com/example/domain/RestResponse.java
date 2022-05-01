@@ -5,29 +5,27 @@ import lombok.Data;
 @Data
 public class RestResponse<T> {
     private String msg;
-    private String code;
+    private Integer code;
     private T data;
 
     public RestResponse(T data) {
-        this.code = "200";
+        this.code = 200;
         this.msg = "success";
         this.data = data;
     }
 
-    public RestResponse(String msg, String code) {
+    public RestResponse(String msg, Integer code) {
         this.msg = msg;
         this.code = code;
     }
 
-    public static  RestResponse success(Object data) {
-        return new RestResponse<>(data);
-    }
+    public static  RestResponse success(Object data) { return new RestResponse<>(data);}
 
     public static RestResponse success() {
-        return new RestResponse("success", "200");
+        return new RestResponse("success", 200);
     }
 
     public static  RestResponse fail(String message) {
-        return new RestResponse(message, "500");
+        return new RestResponse(message, 500);
     }
 }

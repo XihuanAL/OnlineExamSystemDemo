@@ -4,6 +4,7 @@ import com.example.domain.RestResponse;
 import com.example.util.JwtUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.web.authentication.AuthenticationSuccessHandler;
 import org.springframework.stereotype.Component;
 import cn.hutool.json.JSONUtil;
@@ -12,6 +13,7 @@ import javax.servlet.ServletOutputStream;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.util.Iterator;
 
 @Component
 public class MyLoginSuccessHandler implements AuthenticationSuccessHandler {
@@ -29,7 +31,11 @@ public class MyLoginSuccessHandler implements AuthenticationSuccessHandler {
         response.setHeader(jwtUtils.getHeader(),jwt);
         response.setHeader("Access-Control-Expose-Headers", "Authorization");
 
-        RestResponse result = RestResponse.success("登录成功");
+//        String role = authentication.getAuthorities().toString();
+//        response.setHeader("role",role);
+//        response.setHeader("Access-Control-Expose-Headers", "role");
+        Iterator<? extends GrantedAuthority> it= authentication.getAuthorities().iterator();
+        RestResponse result = RestResponse.success(it.next().toString());
 
         out.write(JSONUtil.toJsonStr(result).getBytes("UTF-8"));
 

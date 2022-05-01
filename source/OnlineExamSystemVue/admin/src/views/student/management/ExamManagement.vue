@@ -24,8 +24,7 @@
               <!--              </el-select>-->
               <!--              <el-input placeholder="试卷名" v-model="pagination.examName"-->
               <!--                        style="width: 200px;"></el-input>-->
-              <el-button @click="getExamList()" class="dalfBut">查询</el-button>
-              <el-button type="primary" @click="this.$router.push('/exam/add')">新建</el-button>
+<!--              <el-button @click="getExamList()" class="dalfBut">查询</el-button>-->
             </div>
           </div>
           <el-table :data="examList" style="width: 100%">
@@ -37,8 +36,7 @@
             </el-table-column>
             <el-table-column label="操作" width="180">
               <template v-slot="scope">
-                <el-button type="primary" size="small" @click="editExam(scope.row)">编辑</el-button>
-                <el-button type="danger" size="small" @click="del(scope.row)">删除</el-button>
+                <el-button type="primary" size="small" @click="doExam(scope.row)">考试</el-button>
               </template>
             </el-table-column>
           </el-table>
@@ -64,7 +62,7 @@
 <script>
 
 export default {
-  name: "ExamManagementView.vue",
+  name: "ExamManagement.vue",
   data() {
     return {
       pagination: {
@@ -86,7 +84,7 @@ export default {
   methods: {
     getExamList() {
       //console.log("getExamList");
-      this.$axios.get("/exams/" + this.pagination.currentPage + "/" + this.pagination.pageSize).then((res) => {
+      this.$axios.get("/student/exams/" + this.pagination.currentPage + "/" + this.pagination.pageSize).then((res) => {
         this.examList = res.data.data.records;
         //console.log(this.examList);
         this.pagination.total = res.data.data.total;
@@ -98,28 +96,14 @@ export default {
       this.pagination.currentPage = currentPage; //更新当前页码
       this.getExamList(); //重新查询
     },
-    del(row) {
-      this.$confirm('此操作将永久删除该试卷, 是否继续?', '提示', {
-        confirmButtonText: '确定',
-        cancelButtonText: '取消',
-        type: 'warning'
-      }).then(() => {
-        this.$axios.delete("/exams/" + row.id).then((res) => {
-          this.getExamList();
-        });
-      }).catch(() => {
-      });
-    },
-    editExam(row) {
-      //console.log("row");
-      //console.log(row);
+    doExam(row){
       this.$router.push({
-        name:"examEdit",
+        name:"examPaper",
         params: {
           formData: JSON.stringify(row)
         }
       });
-    },
+    }
   }
 }
 </script>

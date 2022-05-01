@@ -37,7 +37,7 @@
           </el-col>
         </el-row>
       </el-form>
-      <el-card v-show="formData.questionList != null">
+      <div v-show="formData.questionList.length != 0">
         <div class="question-title" v-for="(item,index) in formData.questionList">
           <el-row style="margin-bottom: 20px">
             <el-col :span="2">
@@ -46,7 +46,7 @@
             <span style="size: B4">{{ item.quesContent }}</span>
           </el-row>
         </div>
-      </el-card>
+      </div>
       <div slot="footer" class="dialog-footer">
         <el-button @click="back()">返回</el-button>
         <el-button type="primary" @click="handleAddExam()">确定</el-button>
@@ -95,16 +95,11 @@
 
 </template>
 
-
 <script>
 
+
 export default {
-  name: "ExamPaperEdit",
-  mounted() {
-    //console.log("mounted")
-    this.formData= JSON.parse(this.$route.params.formData);
-    //console.log(this.formData)
-  },
+  name: "ExamPaperAdd",
   data() {
     return {
       dialogFormVisible: false,
@@ -128,7 +123,6 @@ export default {
     }
   },
   created() {
-    //console.log( this.formData);
     this.handleFoundOptions4Grade();
   },
   methods: {
@@ -142,11 +136,10 @@ export default {
     },
     handleAddExam() {
       //console.log(this.formData);
-      this.$axios.put("/exams", this.formData).then((res) => {
-        //TODO
-        if (res.data.code === 200) {
+      this.$axios.post("/exams", this.formData).then((res) => {
+        if (res.data.code == 200) {
           this.$message({
-            message: "修改成功",
+            message: "添加成功",
             type: "success"
           });
           this.$router.back()
