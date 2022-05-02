@@ -66,10 +66,12 @@ export default {
                 message: '修改成功',
                 type: 'success'
               });
-              this.formData = {
-                oldPassword: '',
-                newPassword: '',
-              }
+              this.$axios.post("/logout").then(res => {
+                localStorage.clear()
+                sessionStorage.clear()
+                this.$store.commit("resetState")
+                this.$router.push("/login")
+              });
             } else {
               this.$message({
                 message: "修改失败",

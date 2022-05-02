@@ -24,6 +24,14 @@ const routes = [
                 component: () => import('../views/admin/management/StudentManagementView.vue')
             },
             {
+                path:'/exampaper',
+                component: () => import('../views/admin/management/ExamPaperManagementView.vue')
+            },
+            {
+                path: '/admin/set',
+                component: () => import('../views/admin/management/Personal')
+            },
+            {
                 path: '/exam/add',
                 component: () => import('../views/admin/exampaper/ExamPaperAdd')
             },
@@ -31,7 +39,13 @@ const routes = [
                 path: '/exam/edit',
                 name: "examEdit",
                 component: () => import('../views/admin/exampaper/ExamPaperEdit')
+            },
+            {
+                path: '/exampaperanswer',
+                name: "exampaperanswer",
+                component: () => import('../views/admin/exampaper/ExamPaperAnswer')
             }
+
         ]
     },
     {
@@ -51,6 +65,11 @@ const routes = [
                 path:'/student/exampaper',
                 name:"examPaper",
                 component: () => import('../views/student/exampaper/ExamPaper')
+            },
+            {
+                path: '/student/examPaperDone',
+                name:"examPaperDone",
+                component: () => import('../views/student/exampaper/ExamPaperDone')
             }
         ]
     },

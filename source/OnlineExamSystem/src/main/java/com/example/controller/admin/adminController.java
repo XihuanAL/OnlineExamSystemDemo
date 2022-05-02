@@ -1,27 +1,32 @@
-package com.example.controller.student;
+package com.example.controller.admin;
 
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.example.domain.RestResponse;
 import com.example.domain.User;
 import com.example.service.UserService;
 import com.example.viewmodel.user.UpdatePassword;
-import lombok.val;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RestController;
 
 import java.security.Principal;
 
-@RestController("studentStudentController")
-@RequestMapping("/student/users")
-public class StudentController {
+@RestController
+@RequestMapping("/admin/users")
+public class adminController {
     private final UserService userService;
-    private final Logger logger = LoggerFactory.getLogger(StudentController.class);
+
     @Autowired
-    public StudentController(UserService userService) {
+    public adminController(UserService userService) {
         this.userService = userService;
+    }
+
+    @RequestMapping(value = "/currentUsername", method = RequestMethod.GET)
+    public RestResponse currentUsername(Principal principal) {
+        return RestResponse.success(principal.getName());
     }
 
     @RequestMapping(value = "/updatePassword", method = RequestMethod.POST)
@@ -38,10 +43,5 @@ public class StudentController {
         user.setPassword(new BCryptPasswordEncoder().encode(updatePassword.getNewPassword()));
         userService.updateById(user);
         return RestResponse.success();
-    }
-    //返回用户名
-    @RequestMapping(value = "/currentUsername", method = RequestMethod.GET)
-    public RestResponse currentUsername(Principal principal) {
-        return RestResponse.success(principal.getName());
     }
 }

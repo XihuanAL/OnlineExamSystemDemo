@@ -35,7 +35,7 @@ public class ExamController {
         this.questionService = questionService;
     }
 
-
+    //获取试卷列表
     @RequestMapping(value = "{currentPage}/{pageSize}", method = RequestMethod.GET)
     public RestResponse getQuestionPage(@PathVariable Integer currentPage, @PathVariable Integer pageSize) {
         IPage<Exam> page = new Page<>(currentPage, pageSize);
@@ -48,27 +48,33 @@ public class ExamController {
             examQuestionService.list(new LambdaQueryWrapper<ExamQuestion>().eq(ExamQuestion::getExamId, Exam.getId())).forEach(examQuestion -> {
                 questionIds.add(examQuestion.getQuestionId());
             });
-            List<Question> questions = questionService.list(new LambdaQueryWrapper<Question>().in(!questionIds.isEmpty() , Question::getId, questionIds));
+            List<Question> questions = questionService.list(new LambdaQueryWrapper<Question>().in(!questionIds.isEmpty(), Question::getId, questionIds));
             examVM.setQuestionList(questions);
             return examVM;
         });
         return RestResponse.success(examVMIPage);
     }
 
+    //新增试卷
     @RequestMapping(method = RequestMethod.POST)
     public RestResponse addExam(@RequestBody ExamVM examVM) {
         LambdaQueryWrapper<Subject> wrapper = new LambdaQueryWrapper<>();
         wrapper.eq(Subject::getGradeName, examVM.getGradeName());
         wrapper.eq(Subject::getSubjectName, examVM.getSubjectName());
         Subject subject = subjectService.getOne(wrapper);
-        Exam exam = new Exam(examVM.getExamName(), subject.getId());
+        int paperScore = 0;
+        for(Question question : examVM.getQuestionList()){
+            paperScore += question.getScore();
+        }
+        Exam exam = new Exam(examVM.getExamName(), subject.getId(), paperScore);
         examService.save(exam);
         examQuestionService.saveBatch(examVM.getQuestionList().stream().map(question -> {
-           return new ExamQuestion(exam.getId(), question.getId());
+            return new ExamQuestion(exam.getId(), question.getId());
         }).collect(Collectors.toCollection(ArrayList::new)));
         return RestResponse.success();
     }
 
+    //删除试卷
     @RequestMapping(value = "{id}", method = RequestMethod.DELETE)
     public RestResponse deleteExamById(@PathVariable Integer id) {
         examService.removeById(id);
@@ -76,6 +82,7 @@ public class ExamController {
         return RestResponse.success();
     }
 
+    //修改试卷
     @RequestMapping(method = RequestMethod.PUT)
     public RestResponse updateExam(@RequestBody ExamVM examVM) {
         LambdaQueryWrapper<Subject> wrapper = new LambdaQueryWrapper<>();
@@ -87,8 +94,16 @@ public class ExamController {
         examService.updateById(exam);
         examQuestionService.remove(new LambdaQueryWrapper<ExamQuestion>().eq(ExamQuestion::getExamId, exam.getId()));
         examQuestionService.saveBatch(examVM.getQuestionList().stream().map(question -> {
-           return new ExamQuestion(exam.getId(), question.getId());
+            return new ExamQuestion(exam.getId(), question.getId());
         }).collect(Collectors.toCollection(ArrayList::new)));
         return RestResponse.success();
+    }
+
+    @RequestMapping(value = "/questions/{examId}", method = RequestMethod.GET)
+    public RestResponse getQuestionList(@PathVariable Integer examId) {
+        List<Question> questions = examQuestionService.list(new LambdaQueryWrapper<ExamQuestion>().eq(ExamQuestion::getExamId, examId)).stream().map(examQuestion -> {
+            return questionService.getById(examQuestion.getQuestionId());
+        }).collect(Collectors.toCollection(ArrayList::new));
+        return RestResponse.success(questions);
     }
 }

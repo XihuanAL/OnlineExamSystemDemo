@@ -20,6 +20,6 @@
 - source 源码
   - OnlineExamSystem 后端代码
   - OnlineExamSystemVue 前端代码
-    - admin 管理端
+    - vue 前端代码
 
 - sql 数据库脚本

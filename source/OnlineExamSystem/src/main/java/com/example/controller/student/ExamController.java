@@ -4,16 +4,15 @@ import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.example.domain.*;
-import com.example.service.ExamQuestionService;
-import com.example.service.ExamService;
-import com.example.service.QuestionService;
-import com.example.service.SubjectService;
+import com.example.service.*;
 import com.example.viewmodel.admin.ExamVM;
+import lombok.val;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+import java.security.Principal;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -21,18 +20,22 @@ import java.util.stream.Collectors;
 @RestController("StudentExamController")
 @RequestMapping("/student/exams")
 public class ExamController {
+    private final UserService userService;
     private final ExamService examService;
     private final SubjectService subjectService;
     private final ExamQuestionService examQuestionService;
     private final QuestionService questionService;
+    private final ExamAnswerService examAnswerService;
     private final Logger logger = LoggerFactory.getLogger(ExamController.class);
 
     @Autowired
-    public ExamController(ExamService examService, SubjectService subjectService, ExamQuestionService examQuestionService, QuestionService questionService) {
+    public ExamController(UserService userService, ExamService examService, SubjectService subjectService, ExamQuestionService examQuestionService, QuestionService questionService, ExamAnswerService examAnswerService) {
+        this.userService = userService;
         this.examService = examService;
         this.subjectService = subjectService;
         this.examQuestionService = examQuestionService;
         this.questionService = questionService;
+        this.examAnswerService = examAnswerService;
     }
 
 
@@ -91,4 +94,19 @@ public class ExamController {
         }).collect(Collectors.toCollection(ArrayList::new)));
         return RestResponse.success();
     }
+
+    @RequestMapping(value = "/done/{id}", method = RequestMethod.GET)
+    public RestResponse checkExamDone(@PathVariable Integer id, Principal principal) {
+        LambdaQueryWrapper<User> queryWrapper = new LambdaQueryWrapper<User>();
+        int userId = userService.getOne(queryWrapper.eq(User::getUsername, principal.getName())).getId();
+        LambdaQueryWrapper<ExamAnswer> wrapper = new LambdaQueryWrapper<ExamAnswer>();
+        wrapper.eq(ExamAnswer::getCreaterId, userId);
+        wrapper.eq(ExamAnswer::getExamId, id);
+        ExamAnswer examAnswer = examAnswerService.getOne(wrapper);
+        if(examAnswer == null)
+            return RestResponse.success(false);
+        else return RestResponse.success(true);
+    }
+
+
 }

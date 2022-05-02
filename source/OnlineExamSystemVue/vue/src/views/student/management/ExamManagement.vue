@@ -36,7 +36,9 @@
             </el-table-column>
             <el-table-column label="操作" width="180">
               <template v-slot="scope">
-                <el-button type="primary" size="small" @click="doExam(scope.row)">考试</el-button>
+                <el-button v-if="!this.doneExam.get(scope.row.id)" type="primary" size="small" @click="doExam(scope.row)">考试</el-button>
+                <el-button v-if="this.doneExam.get(scope.row.id)" type="success" size="small" @click="checkExam(scope.row)">查看</el-button>
+<!--                <el-button v-if="doneExam(scope.row)" type="success" size="small" >查看</el-button>-->
               </template>
             </el-table-column>
           </el-table>
@@ -65,6 +67,7 @@ export default {
   name: "ExamManagement.vue",
   data() {
     return {
+      doneExam : {},
       pagination: {
         currentPage: 1,
         pageSize: 7,
@@ -79,6 +82,7 @@ export default {
     }
   },
   created() {
+    this.doneExam = new Map();
     this.getExamList();
   },
   methods: {
@@ -86,11 +90,16 @@ export default {
       //console.log("getExamList");
       this.$axios.get("/student/exams/" + this.pagination.currentPage + "/" + this.pagination.pageSize).then((res) => {
         this.examList = res.data.data.records;
-        //console.log(this.examList);
+        for(let i = 0; i < this.examList.length; i++){
+          this.$axios.get("/student/exams/done/" + this.examList[i].id).then((res) => {
+            this.doneExam.set(this.examList[i].id, res.data.data === true);
+          })
+        }
         this.pagination.total = res.data.data.total;
         this.pagination.currentPage = res.data.data.current;
         this.pagination.pageSize = res.data.data.size;
       })
+
     },
     handleCurrentChange(currentPage) {
       this.pagination.currentPage = currentPage; //更新当前页码
@@ -101,6 +110,14 @@ export default {
         name:"examPaper",
         params: {
           formData: JSON.stringify(row)
+        }
+      });
+    },
+    checkExam(row){
+      this.$router.push({
+        name:"examPaperDone",
+        params: {
+          formData: JSON.stringify(row),
         }
       });
     }
