@@ -1,4 +1,5 @@
 <template>
+  <p>我的得分: {{userScore}}</p>
   <div v-show="formData.questionList.length !== 0">
     <div class="question-title" v-for="(item,index) in formData.questionList">
       <el-row style="margin-bottom: 20px">
@@ -21,6 +22,7 @@ export default {
     this.formData = JSON.parse(this.$route.params.formData);
     this.formData.answerList = [];
     this.getAnswerList();
+    this.getUserScore();
   },
   data () {
     return {
@@ -28,6 +30,7 @@ export default {
         questionList: [],
         answerList: []
       },
+      userScore: 0
     }
   },
   methods: {
@@ -40,6 +43,11 @@ export default {
         });
       });
     },
+    getUserScore() {
+      this.$axios.get("/student/exampapers/score/" + this.formData.id).then(res => {
+        this.userScore = res.data.data;
+      });
+    }
   }
 }
 </script>

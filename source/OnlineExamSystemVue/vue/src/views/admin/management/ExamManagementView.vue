@@ -35,6 +35,8 @@
             </el-table-column>
             <el-table-column label="试卷名" prop="examName">
             </el-table-column>
+            <el-table-column label="总分" prop="paperScore">
+            </el-table-column>
             <el-table-column label="操作" width="180">
               <template v-slot="scope">
                 <el-button type="primary" size="small" @click="editExam(scope.row)">编辑</el-button>

@@ -1,12 +1,8 @@
 package com.example.configrue;
 
-import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.Configuration;
 import org.springframework.web.cors.CorsConfiguration;
-import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
-import org.springframework.web.filter.CorsFilter;
 
-
+//已弃用
 //@Configuration
 public class CorsConfig  {
 
@@ -21,6 +17,5 @@ public class CorsConfig  {
         corsConfiguration.setMaxAge(MAX_AGE);
         return corsConfiguration;
     }
-
 
 }

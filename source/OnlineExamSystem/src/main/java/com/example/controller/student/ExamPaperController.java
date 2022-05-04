@@ -65,4 +65,10 @@ public class ExamPaperController {
         ExamQuestionAnswer examQuestionAnswer = examQuestionAnswerService.getOne(new LambdaQueryWrapper<ExamQuestionAnswer>().eq(ExamQuestionAnswer::getExamAnswerId, examAnswer.getId()).eq(ExamQuestionAnswer::getQuestionId, questionId));
         return RestResponse.success(examQuestionAnswer.getQuestionAnswer());
     }
+
+    @RequestMapping(value = "/score/{examId}", method = RequestMethod.GET)
+    public RestResponse getScore(@PathVariable int examId, Principal principal){
+        ExamAnswer examAnswer = examAnswerService.getOne(new LambdaQueryWrapper<ExamAnswer>().eq(ExamAnswer::getExamId, examId).eq(ExamAnswer::getCreaterId, userService.getOne(new LambdaQueryWrapper<User>().eq(User::getUsername, principal.getName())).getId()));
+        return RestResponse.success(examAnswer.getUserScore());
+    }
 }

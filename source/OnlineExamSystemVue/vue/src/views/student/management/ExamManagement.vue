@@ -34,6 +34,8 @@
             </el-table-column>
             <el-table-column label="试卷名" prop="examName">
             </el-table-column>
+            <el-table-column label="总分" prop="paperScore">
+            </el-table-column>
             <el-table-column label="操作" width="180">
               <template v-slot="scope">
                 <el-button v-if="!this.doneExam.get(scope.row.id)" type="primary" size="small" @click="doExam(scope.row)">考试</el-button>

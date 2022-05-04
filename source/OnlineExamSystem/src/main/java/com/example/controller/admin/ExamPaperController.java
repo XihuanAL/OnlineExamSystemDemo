@@ -71,4 +71,7 @@ public class ExamPaperController {
         ExamQuestionAnswer examQuestionAnswer = examQuestionAnswerService.getOne(new LambdaQueryWrapper<ExamQuestionAnswer>().eq(ExamQuestionAnswer::getExamAnswerId, examAnswer.getId()).eq(ExamQuestionAnswer::getQuestionId, questionId));
         return RestResponse.success(examQuestionAnswer.getQuestionAnswer());
     }
+
+
+
 }

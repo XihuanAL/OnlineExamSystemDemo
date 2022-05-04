@@ -4,10 +4,7 @@ import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.example.domain.*;
-import com.example.service.ExamQuestionService;
-import com.example.service.ExamService;
-import com.example.service.QuestionService;
-import com.example.service.SubjectService;
+import com.example.service.*;
 import com.example.viewmodel.admin.ExamVM;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -25,14 +22,18 @@ public class ExamController {
     private final SubjectService subjectService;
     private final ExamQuestionService examQuestionService;
     private final QuestionService questionService;
+    private final ExamAnswerService examAnswerService;
+    private final ExamQuestionAnswerService examQuestionAnswerService;
     private final Logger logger = LoggerFactory.getLogger(ExamController.class);
 
     @Autowired
-    public ExamController(ExamService examService, SubjectService subjectService, ExamQuestionService examQuestionService, QuestionService questionService) {
+    public ExamController(ExamService examService, SubjectService subjectService, ExamQuestionService examQuestionService, QuestionService questionService, ExamAnswerService examAnswerService, ExamQuestionAnswerService examQuestionAnswerService) {
         this.examService = examService;
         this.subjectService = subjectService;
         this.examQuestionService = examQuestionService;
         this.questionService = questionService;
+        this.examAnswerService = examAnswerService;
+        this.examQuestionAnswerService = examQuestionAnswerService;
     }
 
     //获取试卷列表
@@ -79,6 +80,10 @@ public class ExamController {
     public RestResponse deleteExamById(@PathVariable Integer id) {
         examService.removeById(id);
         examQuestionService.remove(new LambdaQueryWrapper<ExamQuestion>().eq(ExamQuestion::getExamId, id));
+        examAnswerService.list(new LambdaQueryWrapper<ExamAnswer>().eq(ExamAnswer::getExamId, id)).forEach(examAnswer -> {
+            examQuestionAnswerService.remove(new LambdaQueryWrapper<ExamQuestionAnswer>().eq(ExamQuestionAnswer::getExamAnswerId, examAnswer.getId()));
+                });
+        examAnswerService.remove(new LambdaQueryWrapper<ExamAnswer>().eq(ExamAnswer::getExamId, id));
         return RestResponse.success();
     }
 
@@ -89,7 +94,11 @@ public class ExamController {
         wrapper.eq(Subject::getGradeName, examVM.getGradeName());
         wrapper.eq(Subject::getSubjectName, examVM.getSubjectName());
         Subject subject = subjectService.getOne(wrapper);
-        Exam exam = new Exam(examVM.getExamName(), subject.getId());
+        int paperScore = 0;
+        for(Question question : examVM.getQuestionList()){
+            paperScore += question.getScore();
+        }
+        Exam exam = new Exam(examVM.getExamName(), subject.getId(), paperScore);
         exam.setId(examVM.getId());
         examService.updateById(exam);
         examQuestionService.remove(new LambdaQueryWrapper<ExamQuestion>().eq(ExamQuestion::getExamId, exam.getId()));
