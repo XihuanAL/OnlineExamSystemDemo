@@ -27,7 +27,7 @@
 1. 打开数据库管理软件，新建数据库并运行sql目录下的sql脚本文件
 2. 用idea打开OnlineExamSystem目录，等待idea自动加载maven依赖，修改resource中的application.yml文件与本地数据库对应
 
-![evtzC7ENb8](D:\Code\OnlineExamSystemDemo\static\evtzC7ENb8.png)
+![evtzC7ENb8](.\static\evtzC7ENb8.png)
 
 3. 运行OnlineExamSystemApplication启动后端代码，后端端口80
 4. 用webstorm或vscode打开vue目录，在Terminal命令行中依次输入npm install命令和npm audit fix --force命令
