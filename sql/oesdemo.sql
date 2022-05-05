@@ -1,5 +1,5 @@
 /*
- Navicat MySQL Data Transfer
+ Navicat Premium Data Transfer
 
  Source Server         : localhost
  Source Server Type    : MySQL
@@ -11,7 +11,7 @@
  Target Server Version : 80026
  File Encoding         : 65001
 
- Date: 04/05/2022 17:16:25
+ Date: 04/05/2022 19:32:37
 */
 
 SET NAMES utf8mb4;
@@ -22,10 +22,10 @@ SET FOREIGN_KEY_CHECKS = 0;
 -- ----------------------------
 DROP TABLE IF EXISTS `t_exam`;
 CREATE TABLE `t_exam`  (
-  `id` int NOT NULL AUTO_INCREMENT,
-  `subject_id` int NULL DEFAULT NULL,
+  `id` int(0) NOT NULL AUTO_INCREMENT,
+  `subject_id` int(0) NULL DEFAULT NULL,
   `exam_name` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NULL DEFAULT NULL,
-  `paper_score` int NULL DEFAULT NULL,
+  `paper_score` int(0) NULL DEFAULT NULL,
   PRIMARY KEY (`id`) USING BTREE
 ) ENGINE = InnoDB AUTO_INCREMENT = 9 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci ROW_FORMAT = Dynamic;
 
@@ -40,14 +40,14 @@ INSERT INTO `t_exam` VALUES (6, 36, '月考', 10);
 -- ----------------------------
 DROP TABLE IF EXISTS `t_exam_answer`;
 CREATE TABLE `t_exam_answer`  (
-  `id` int NOT NULL AUTO_INCREMENT,
-  `exam_id` int NULL DEFAULT NULL,
-  `user_score` int NULL DEFAULT NULL,
-  `paper_score` int NULL DEFAULT NULL,
-  `creater_id` int NULL DEFAULT NULL,
-  `create_time` datetime NULL DEFAULT NULL ON UPDATE CURRENT_TIMESTAMP,
+  `id` int(0) NOT NULL AUTO_INCREMENT,
+  `exam_id` int(0) NULL DEFAULT NULL,
+  `user_score` int(0) NULL DEFAULT NULL,
+  `paper_score` int(0) NULL DEFAULT NULL,
+  `creater_id` int(0) NULL DEFAULT NULL,
+  `create_time` datetime(0) NULL DEFAULT NULL ON UPDATE CURRENT_TIMESTAMP(0),
   PRIMARY KEY (`id`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 6 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci ROW_FORMAT = Dynamic;
+) ENGINE = InnoDB AUTO_INCREMENT = 8 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci ROW_FORMAT = Dynamic;
 
 -- ----------------------------
 -- Records of t_exam_answer
@@ -59,11 +59,11 @@ INSERT INTO `t_exam_answer` VALUES (7, 6, 10, 10, 2, '2022-05-04 17:07:14');
 -- ----------------------------
 DROP TABLE IF EXISTS `t_exam_question`;
 CREATE TABLE `t_exam_question`  (
-  `id` int NOT NULL AUTO_INCREMENT,
-  `exam_id` int NOT NULL,
-  `question_id` int NOT NULL,
+  `id` int(0) NOT NULL AUTO_INCREMENT,
+  `exam_id` int(0) NOT NULL,
+  `question_id` int(0) NOT NULL,
   PRIMARY KEY (`id`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 34 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci ROW_FORMAT = Dynamic;
+) ENGINE = InnoDB AUTO_INCREMENT = 39 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci ROW_FORMAT = Dynamic;
 
 -- ----------------------------
 -- Records of t_exam_question
@@ -78,13 +78,13 @@ INSERT INTO `t_exam_question` VALUES (38, 6, 11);
 -- ----------------------------
 DROP TABLE IF EXISTS `t_exam_question_answer`;
 CREATE TABLE `t_exam_question_answer`  (
-  `id` int NOT NULL AUTO_INCREMENT,
-  `exam_answer_id` int NULL DEFAULT NULL,
-  `question_id` int NULL DEFAULT NULL,
+  `id` int(0) NOT NULL AUTO_INCREMENT,
+  `exam_answer_id` int(0) NULL DEFAULT NULL,
+  `question_id` int(0) NULL DEFAULT NULL,
   `question_answer` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NULL DEFAULT NULL,
-  `do_right` int NULL DEFAULT NULL,
+  `do_right` int(0) NULL DEFAULT NULL,
   PRIMARY KEY (`id`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 15 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci ROW_FORMAT = Dynamic;
+) ENGINE = InnoDB AUTO_INCREMENT = 19 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci ROW_FORMAT = Dynamic;
 
 -- ----------------------------
 -- Records of t_exam_question_answer
@@ -98,12 +98,12 @@ INSERT INTO `t_exam_question_answer` VALUES (18, 7, 11, '2', 1);
 -- ----------------------------
 DROP TABLE IF EXISTS `t_question`;
 CREATE TABLE `t_question`  (
-  `id` int NOT NULL AUTO_INCREMENT,
-  `subject_id` int NULL DEFAULT NULL,
+  `id` int(0) NOT NULL AUTO_INCREMENT,
+  `subject_id` int(0) NULL DEFAULT NULL,
   `ques_content` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NULL DEFAULT NULL,
   `ans_content` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NULL DEFAULT NULL,
   `correct` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NULL DEFAULT NULL,
-  `score` int NULL DEFAULT NULL,
+  `score` int(0) NULL DEFAULT NULL,
   `type` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NULL DEFAULT NULL,
   PRIMARY KEY (`id`) USING BTREE
 ) ENGINE = InnoDB AUTO_INCREMENT = 20 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci ROW_FORMAT = Dynamic;
@@ -121,7 +121,7 @@ INSERT INTO `t_question` VALUES (19, 36, '100+100', NULL, '200', 5, '填空题')
 -- ----------------------------
 DROP TABLE IF EXISTS `t_subject`;
 CREATE TABLE `t_subject`  (
-  `id` int NOT NULL AUTO_INCREMENT,
+  `id` int(0) NOT NULL AUTO_INCREMENT,
   `subject_name` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NULL DEFAULT NULL,
   `grade_name` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NULL DEFAULT NULL,
   PRIMARY KEY (`id`) USING BTREE
@@ -140,7 +140,7 @@ INSERT INTO `t_subject` VALUES (36, '数学', '高三');
 -- ----------------------------
 DROP TABLE IF EXISTS `t_user`;
 CREATE TABLE `t_user`  (
-  `id` int NOT NULL,
+  `id` int(0) NOT NULL,
   `username` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NULL DEFAULT NULL,
   `password` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NULL DEFAULT NULL,
   `real_name` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NULL DEFAULT NULL,

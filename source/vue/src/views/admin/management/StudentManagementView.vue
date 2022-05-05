@@ -119,6 +119,7 @@ export default {
       this.$axios.post("/users", this.formData)
           .then((res)=>{
             this.dialogFormVisible = false;
+            this.$message.success('新增成功,默认初始密码为123456');
             this.getStudentList();
       })
     },

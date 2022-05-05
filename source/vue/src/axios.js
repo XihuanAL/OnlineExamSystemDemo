@@ -2,7 +2,7 @@ import axios from "axios";
 import router from "./router";
 import Element from "@/plugins/element";
 
-axios.defaults.baseURL = "http://localhost" // 基础路径
+axios.defaults.baseURL = "http://localhost:80" // 基础路径
 const request = axios.create({
     timeout: 5000,
     headers: {
